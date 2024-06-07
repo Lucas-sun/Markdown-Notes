@@ -295,7 +295,7 @@ docker rm `docker ps -aq`
 ```
 #### 常见操作
 1. 镜像含前台进程，创建容器 + 启动
-`docker run -d -p 80:8000 --name xxx --no-cache xxx:xxx`
+`docker run -d -p 80:8000 --name xxx xxx:xxx`
 2. 镜像不含前台进程，进入系统
 `docker run -ti ubuntu:18.04 bash`
 `docker run -ti ubuntu:18.04 sh`

@@ -245,7 +245,9 @@
     ```
     ```python
     # main.py
-    from typing import Annotated
+    from typing import Annotated, Optional
+
+    from pydantics import BaseModel, Field
     from sqlalchemy.orm import Session
     from fastapi import FastAPI, Depends, HTTPException
     from starlette import status
@@ -276,10 +278,92 @@
         if todo_model is not None:
             return todo_model
         raise HTTPException(status_code=404, detail="Todo not found.")
+    
+    class TodoRequest(BaseModel):
+        title: str = Field(min_length=3)
+        description: str = Field(min_length=3, max_length=100)
+        priority: int = Field(gt=0, lt=6)
+        complete: bool
+
+    @app.post("/todo", status_code=status.HTTP_201_CREATED)
+    async def create_todo(db: db_dependency, todo_request: TodoRequest):
+        todo_model = Tdodos(**todo_request.dict())
+
+        db.add(todo_model)
+        db.commit()
+
+    @app.put("/todo/{todo_id}", status_code=status.HTTP_204_NO_CONTENT)
+    async def update_todo(db: db_dependency, todo_id: int, todo_request: TodoRequest):
+        todo_model = db.query(Todos).filter(Todos.ID==todo_id).first()
+        if todo_model is None:
+            reise HTTPException(status_code=404, detail="Todo not found.")
+        todo_model.title = todo_request.title
+        todo_model.description = todo_request.description
+        todo_model.priority = todo_request.priority
+        todo_model.complete = todo_request.complete
+
+        db.add(todo_model)
+        db.commit()
+
+    @app.delete("/todo/{todo_id}", status_code=status.HTTP_204_NO_CONTENT)
+    async def delete_todo(db:db_dependency, todo_id: int):
+        todo_model = db.query(Todos).filter(Todods.id==todo_id).first()
+        if todo_model is None:
+            raise HTTPException(status_code=404, detail="Todo not found")
+        db.query(Todos).filter(Todos.id==todo_id).delete()
+        db.commit()
     ```
     ```shell
     uvicorn main:app --reload
     ```
 - Authentication
+    ```python
+    # auth.py
+    # If you want to use the auth and main at the same time
+    # Please move auth or other to package named routers(optional)
+    # Next please import APIRouter
+    # In the end, please write below in main
+    # from routers import auth
+    # app.include_router(auth.router)
+
+
+    from fastapi import FastAPI, APIRouter
+
+    # app = FastAPI()
+
+    # @app.get("/auth")
+    # async def get_user():
+    #     return {'user': 'authenticated'}
+
+    router = APIRouter()
+    @router.get("/auth")
+    async def get_user():
+        return {'user': 'authenticated'}
+    ```
+```python
+# The foreignkey
+from database import Base
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+
+class Users(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True)
+    username = Column(String, unique=True)
+    hashed_password = Column(String)
+    is_active = Column(Boolean, default=True)
+    role = Column(String)
+
+class Todos(Base):
+    __tablename__ = "todos"
+
+    id = Column(Integer, primary_key=True, index=True) # The parameter 'index' tell our database table that this is indexable, which means it's going to be unique.
+    title = Column(String)
+    description = Column(String)
+    priority = Column(Integer)
+    complete = Column(Boolean, default=False)
+    owner_id = Column(Interger, ForeignKey("users.id"))
+```
 - Authorization
 - Hashing Passwords

@@ -340,30 +340,72 @@
     async def get_user():
         return {'user': 'authenticated'}
     ```
-```python
-# The foreignkey
-from database import Base
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+    ```python
+    # The foreignkey
+    from database import Base
+    from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 
-class Users(Base):
-    __tablename__ = "users"
+    class Users(Base):
+        __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True)
-    username = Column(String, unique=True)
-    hashed_password = Column(String)
-    is_active = Column(Boolean, default=True)
-    role = Column(String)
+        id = Column(Integer, primary_key=True, index=True)
+        email = Column(String, unique=True)
+        username = Column(String, unique=True)
+        hashed_password = Column(String)
+        is_active = Column(Boolean, default=True)
+        role = Column(String)
 
-class Todos(Base):
-    __tablename__ = "todos"
+    class Todos(Base):
+        __tablename__ = "todos"
 
-    id = Column(Integer, primary_key=True, index=True) # The parameter 'index' tell our database table that this is indexable, which means it's going to be unique.
-    title = Column(String)
-    description = Column(String)
-    priority = Column(Integer)
-    complete = Column(Boolean, default=False)
-    owner_id = Column(Interger, ForeignKey("users.id"))
-```
+        id = Column(Integer, primary_key=True, index=True) # The parameter 'index' tell our database table that this is indexable, which means it's going to be unique.
+        title = Column(String)
+        description = Column(String)
+        priority = Column(Integer)
+        complete = Column(Boolean, default=False)
+        owner_id = Column(Interger, ForeignKey("users.id"))
+    ```
+    ```python
+    # hash this password
+    # Firstly, you need install python library
+    # pip install "passlib[bcrypt]"
+    from fastapi import APIRouter
+    from models import Users
+    from pydantic import BaseModel
+    from passlib.context import CryptContext
+
+
+    router = APIRouter()
+
+    bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated="auto")
+
+    class Create_User(BaseModel):
+        username: str
+        email: str
+        password: str
+        role: str
+
+    @router.post("/create_user")
+    async def create_user(db: db_dependency, create_user_request: Create_User):
+        create_user_model = Users(
+            email = create_user_request.email,
+            username = create_user_request.username,
+            hashed_password = bcrypt_context.hash(create_user_request.password),
+            is_active = True,
+            role = "admin"
+        )
+        db.create(create_user_model)
+        db.commit()
+    ```
 - Authorization
+```python
+from fastapi.security import OAuth2PasswrodRequestForm
+
+@router.post("/token")
+async def login_for_access_token(form_data: Annotated[OAuth2PasswrodRequestForm, Depends()], db: db_dependency):
+    return 'token'
+
+# we need install python-multpart
+# pip install python-multpart
+```
 - Hashing Passwords

@@ -373,6 +373,7 @@
     from models import Users
     from pydantic import BaseModel
     from passlib.context import CryptContext
+    from fastapi.security import OAuth2PasswrodRequestForm
 
 
     router = APIRouter()
@@ -396,16 +397,100 @@
         )
         db.create(create_user_model)
         db.commit()
+    
+    # we need install python-multpart
+    # pip install python-multipart
+    def authenticate_user(username: str, password: str, db):
+        user = db.query(Users).filter(Users.username==username).first()
+        if not user:
+            return False
+        if not bcrypt_context.verify(password, user.hashed_password):
+            return False
+        return user
+
+    # pip install "python-jose[cryptography]"
+    from jose import jwt
+    
+    # You can use cmd 'openssl rand -hex 32' to generate it.
+    SECRET_KEY = '8b31ad97538cda7025035a8733f6c4ff642e317925c36f07fb61658c42d5a875'
+    ALGORITHM = 'HS256'
+
+    def create_access_token(username: str, user_id: int, expires_delta: timedelta):
+        encode = {
+            'sub': username,
+            'id': user_id
+        }
+        expires = datetime.utcnow() + expires_delta
+        encode.update({"exp": expires})
+        return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
+
+    @router.post("/token")
+    async def login_for_access_token(form_data: Annotated[OAuth2PasswrodRequestForm, Depends()], db: db_dependency):
+        user = authenticate_user(form_data.username, form_data.password, db)
+        if not user:
+            return "Failed"
+        token = create_access_token(user.username, user.id, timedelta(minutes=20))
+        return token
+
     ```
+- Hashing Passwords
+    ```python
+    # pip install "passlib[bcrypt]"
+    from passlib.context import CryptContext
+
+    bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated="auto")
+
+    hashed_password = bcrypt_context.hash(password)
+
+    bcrypt_context.verify(password, hashed_password) # This can verify what is it same between password and hashed_password.
+    ```
+- Web Token(JWT)
+You need watch videos from P62 to P64
 - Authorization
 ```python
-from fastapi.security import OAuth2PasswrodRequestForm
+# admin.py
+...
 
-@router.post("/token")
-async def login_for_access_token(form_data: Annotated[OAuth2PasswrodRequestForm, Depends()], db: db_dependency):
-    return 'token'
+router = APIRouter(
+    prefix='/admin',
+    tags=['admin']
+)
 
-# we need install python-multpart
-# pip install python-multpart
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+db_dependency = Annotated[Session, Depends(get_db)]
+user_dependency = Annotated[dict, Depends(get_current_user)]
+
+@router.get("/todo", status_code=status.HTTP_200_OK)
+async def read_all(user: user_dependency, db: db_dependency):
+    if user is None or user.get("user_role") != admin:
+        raise HTTPException(status_code=401, detail='Authentication Failed')
+    return db.query(Todos).all()
+
 ```
-- Hashing Passwords
+- MySQL
+```python
+# pip install pymysql
+
+# from typing import Annotated
+from typing_extensions import Annotated
+
+from fastapi import Depends
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.ext.declarative import declarative_base
+
+SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:root@10.76.2.208:4866/kqsql_demo"
+
+# The engine can open up a connection and use our database
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+Base = declarative_base()
+```

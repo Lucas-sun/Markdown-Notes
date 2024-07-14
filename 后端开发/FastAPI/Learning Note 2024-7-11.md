@@ -581,7 +581,7 @@ async def deleteDemo(id: int):
         return demo2
     ```
     > If we don't use the dependency, It can be written in decorators, such as...
-    > We can use it to verify auth What just raise HTTPException in dependency.
+    > We can use it to verify auth what just raise HTTPException in dependency.
     ```python
     @xxx.get("/", dependencies=[Depends(demo2),])
     ```
@@ -596,12 +596,37 @@ async def deleteDemo(id: int):
     app = FastAPI(dependencies=[Depends(demo2),])
     ```
 ## Authentication and Authorization
-```python
-from fastapi import FastAPI
+   - Hash Password
+        ```python
+        # pip install passlib[bcrypt]
 
-app = FastAPI()
+        from passlib.context import CryptContext
 
-@app.get("/demo")
-async def demo():
-    
-````
+        password = "xxxx"
+
+        bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
+
+        encrypted_password = bcrypt_context.hash(password) # It generates a encrypted password, you can save it to database.
+
+        bcrypt_context.verify(password, encrypted_password) # It will verify two parameters is same or not, it's very useful when client login
+        ```
+   - Login
+    ```python
+    # pip install python-multipart
+
+    from fastapi import FastAPI, Depends
+    from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
+
+    app = FastAPI()
+
+    @app.post("/login")
+    async def login(form_data: OAuth2PasswordRequestForm=Depends()):
+        # We can get username and password to generate token and return in here
+        return 'token'
+
+    OAuth2_Bearer = OAuth2PasswordBearer(tokenURL="login")
+    async def verify_user_demo(token: str=Depends(OAuth2_Bearer)):
+        # We can write code about verify logic
+        # Then raise Exception or return something
+        return {}
+    ````

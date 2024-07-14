@@ -242,6 +242,34 @@
     if __name__ == "__main__":
         uvicorn.run("main:app", port=8000, debug=True, reload=True)
     ```
+8. The Response Model
+    ```python
+    from fastapi import APIRouter
+    from pydantic import BaseModel, EmailStr
+
+    router = APIRouter()
+
+    class Demo(BaseModel):
+        key1: str
+        key2: str
+        key3: EmailStr
+
+    items = {
+        "one": {"key1": "123"}
+        "two": {"key2": "123", "key3": "123"}
+        "three": {"key1": "123", "key2": "123", "key3": "123"}
+    }
+
+    # param: response_model: Do serialization for showing to client
+    # param: response_model_exclude_unset: If the key is unset in database, it will not serialize that key when true.
+    # param: response_model_exclude_none
+    # param: response_model_exclude_default
+    # param: response_model_exclude
+    # param: response_model_include
+    @router.post("/xxx", response_model=Demo, response_model_exclude_unset=True)
+    async def demo():
+        return items["one"]
+    ```
 ## Database
 ### ORM Library
 > **Tortoise** ORM is an easy-to-use asyncio ORM inspired by Django
@@ -566,5 +594,14 @@ async def deleteDemo(id: int):
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="xxxxx")
     
     app = FastAPI(dependencies=[Depends(demo2),])
-
     ```
+## Authentication and Authorization
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/demo")
+async def demo():
+    
+````

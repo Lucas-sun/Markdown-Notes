@@ -611,22 +611,22 @@ async def deleteDemo(id: int):
         bcrypt_context.verify(password, encrypted_password) # It will verify two parameters is same or not, it's very useful when client login
         ```
    - Login
-    ```python
-    # pip install python-multipart
+        ```python
+        # pip install python-multipart
 
-    from fastapi import FastAPI, Depends
-    from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
+        from fastapi import FastAPI, Depends
+        from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 
-    app = FastAPI()
+        app = FastAPI()
 
-    @app.post("/login")
-    async def login(form_data: OAuth2PasswordRequestForm=Depends()):
-        # We can get username and password to generate token and return in here
-        return 'token'
+        @app.post("/login")
+        async def login(form_data: OAuth2PasswordRequestForm=Depends()):
+            # We can get username and password to generate token and return in here
+            return 'token'
 
-    OAuth2_Bearer = OAuth2PasswordBearer(tokenURL="login")
-    async def verify_user_demo(token: str=Depends(OAuth2_Bearer)):
-        # We can write code about verify logic
-        # Then raise Exception or return something
-        return {}
-    ````
+        OAuth2_Bearer = OAuth2PasswordBearer(tokenURL="login")
+        async def verify_user_demo(token: str=Depends(OAuth2_Bearer)):
+            # We can write code about verify logic
+            # Then raise Exception or return something
+            return {}
+        ```

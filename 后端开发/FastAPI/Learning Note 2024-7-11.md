@@ -318,7 +318,7 @@
                         'database': 'xxxx',
                         'minsize': xx,
                         'maxsize': xx,
-                        'charset': 'utf8m64',
+                        'charset': 'utf8mb4',
                         'echo': True
                     }
                 }

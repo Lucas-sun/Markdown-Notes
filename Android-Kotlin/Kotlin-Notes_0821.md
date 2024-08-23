@@ -1,7 +1,7 @@
 # Kotlin笔记
 
 ## 背景
-![Kotlin and JVM](/Kotlin-Notes_0821/Kotlin%20and%20JVM.png)
+![Kotlin and JVM](Kotlin-Notes_0821/Kotlin%20and%20JVM.png)
 
 ## 变量声明与内置数据类型
 **变量声明**
@@ -101,7 +101,7 @@ println("You are logged in: ${if (isLogined) "Yes" else "No"}")
 ```
 
 ## 函数
-![Kotlin Functions](/Kotlin-Notes_0821/func.png)
+![Kotlin Functions](Kotlin-Notes_0821/func.png)
 ```kotlin
 // 函数默认都是public的
 // 其实Kotlin的函数更规范，先有输入，再有输出

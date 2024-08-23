@@ -1,7 +1,7 @@
 # Android Studio Notes
 
 ## Android系统特性和平台架构
-![Android系统特性和平台架构](/Android-Notes/plugins.png)
+![Android系统特性和平台架构](Android-Notes/plugins.png)
 
 **相关术语的解析**
 1. Daivik：Android特有的虚拟机，运行在手机上，负责运行Android应用。

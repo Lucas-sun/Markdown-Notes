@@ -1,7 +1,7 @@
 # Android Studio Notes
 
 ## Android系统特性和平台架构
-![Android系统特性和平台架构](Android-Notes/plugins.png)
+![Android系统特性和平台架构](/Android-Notes/plugins.png)
 
 **相关术语的解析**
 1. Daivik：Android特有的虚拟机，运行在手机上，负责运行Android应用。
@@ -113,3 +113,21 @@ A：1. 应用程序升级，只有以同一个证书签名，系统才会允许�
 | android:textScaleX<br>android:textScaleY | 设置字与字的水平和垂直间隔 ｜
 | android:textColor | 文本颜色 |
 | android:textSize | 文本大小 |
+- **Button**
+
+- **ImageView**
+
+- **ToggleButton**
+
+- **Switch**
+
+- **ProgressBar**
+
+- **SeekBar**
+
+- **RatingBar**
+
+- **ScrollView**
+
+## Activity的概念和生命周期图
+![Activity的概念和生命周期图](Android-Notes/Activity.png)

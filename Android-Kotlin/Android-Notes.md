@@ -1,9 +1,11 @@
 # Android Studio Notes
 
 ## Android系统特性和平台架构
+
 ![Android系统特性和平台架构](/Android-Notes/plugins.png)
 
 **相关术语的解析**
+
 1. Daivik：Android特有的虚拟机，运行在手机上，负责运行Android应用。
 2. AVD（Android Virtual Device）：模拟器，用于在电脑上运行Android应用。
 3. ADT（Android Development Tools）：Android开发工具包，包含了Android SDK、Android Studio、ADB（Android Debug Bridge）等工具。
@@ -15,6 +17,7 @@
 9. AndroidManifext.xml：Android应用清单文件，用于描述应用的基本信息。
 
 **ADB命令**
+
 1. 安装软件到设备：adb install [-r] [-s] <apk文件路径> ：安装apk到设备，-r表示覆盖安装，-s表示安装到sdcard。
 2. 卸载软件：adb uninstall [-k] <包名> ：卸载指定包名的软件，-k表示保留数据和缓存目录。
 3. 取出手机中的文件：adb pull <设备路径> <本地路径> ：从设备中取出指定路径的文件到本地。
@@ -26,9 +29,11 @@
 9. 启动adb进程：adb start-server ：启动adb进程。
 
 **app打包与安装的流程**
+
 ![app打包与安装的流程](Android-Notes/5918079.jpg)
 
 **签名**
+
 Q：什么是签名？
 A：android app都需要我们用一个证书对应用进行数字签名，签名的目的是为了保证应用的安全性，防止被恶意篡改。平时调试时AS会自动用默认的密钥和证书来签名，但我们实际发布时，不会自动签名，这时候需要进行手动签名。
 
@@ -38,6 +43,7 @@ A：1. 应用程序升级，只有以同一个证书签名，系统才会允许�
 3. 代码和数据共享：android提供了基于签名的权限机制，只有同一个证书签名的应用才能访问共享的数据。
 
 ## Android Studio
+
 1. 创建新项目: File -> New -> New Project -> 选择你想创建的项目类型.
 2. 项目目录介绍: 
    - libs: 包含了在项目中用到的所有库文件.
@@ -45,10 +51,16 @@ A：1. 应用程序升级，只有以同一个证书签名，系统才会允许�
    - AndroidManifest.xml: 包含app的信息, 包括包名, 版本号, 权限等.
    - src: 包含项目的主要代码, 包括java文件, kotlin文件, 资源文件等.
 
+**SDK**
+
+SDK全称是Software Development Kit，即软件开发工具包，它可将app源码编译成可执行的app应用
+
 ## UI设计
+
 在所有的app中，所有用户界面元素都是由View和ViewGroup组成的，View是最基本的用户界面元素，ViewGroup则是View的容器，可以包含其他View，并提供布局功能。
 
 **布局方式**
+
 |布局|说明|
 |:---:|:---:|
 | LinearLayout | 线性布局，按顺序从上到下依次排列子View。 |

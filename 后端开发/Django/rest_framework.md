@@ -239,15 +239,19 @@ class Home3View(APIView):
      3. request.data
    - 上传文件解析器
      - FileUploadParser
+     
         ![代码实例](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-11%20150814.png)
    - 混合数据解析器:既可以包含数据，也可以包含文件
      - MultiPartParser
+     
         ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-11%20151112.png)
 3. **序列化器**
    - 元类
      - 创建类的两种方式，本质上由type创建
+     
         ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-11%20154443.png)
      - 在`type()`的基础上写继承
+     
         ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-11%20163146.png)
      - 所有指定metaclass类的子类均有metaclass创建
    - Tips:
@@ -261,49 +265,68 @@ class Home3View(APIView):
      1. 序列化：从数据库获取Queryset或者数据对象转化成JSON格式
         - 使用起来和Form组件类似
         - 单个数据序列化
+        
         ![单个数据序列化](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-12%20092011.png)
         - 多个数据序列化
+        
         ![多个数据序列化](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-12%20092437.png)
         - 支持ModelSerializer
+        
         ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-12%20092857.png)
         - 多种格式类型的数据库字段需要字段的自定义
+        
         ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-12%20095143.png)
         - 自定义字段
+        
         ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-12%20100223.png)
         - 嵌套，支持ForeignKey、ManyToMany字段
+        
         ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-12%20101813.png)
         - 继承
+        
         ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-12%20102321.png)
      2. 序列化-源码流程
+     
         ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-12%20104306.png)
         - 序列化过程
+        
         ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-12%20110240.png)
         - 详细过程
           - P57-P64重新看
-     3. 数据校验
+     4. 数据校验
         - 路由 -> 视图 -> request.data -> 校验（序列化类） -> 操作（如果是db，序列化器也可以）
         - Serializer
+        
         ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-12%20121805.png)
           - 内置校验
+        
             ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-12%20133603.png)
           - 正则校验
             - 可以写多个正则校验
+            
             ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-12%20134110.png)
           - 钩子校验
+        
             ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-12%20135814.png)
         - ModelSerializer
+        
         ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-12%20140350.png)
         - 序列器操作数据库
           - 可以直接存储：使用序列化器实例化对象的`save()`
+          
             ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-12%20142711.png)
           - 如果用户上传的数据多于数据库的键值，需要先`pop()`掉，然后在`save()`
+          
             ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-12%20143430.png)
         - ForeignKey处理
+        
         ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-12%20144823.png)
         - ManyToMany处理
+        
         ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-12%20145320.png)
         - Tips
           - 如果想要创建符合数据库，但不符合类中定义的字段时，需要自定义字段交给ModelSerializer
+          
             ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-12%20145733.png)
         - 继续看P74
 
@@ -311,14 +334,16 @@ class Home3View(APIView):
 
 
 
-     4. 数据校验-源码分析
-     5. 同时进行数据校验和序列化
+     5. 数据校验-源码分析
+     6. 同时进行数据校验和序列化
         - 写两个serializer分别用于校验和序列化
         - 一个serializer使用write_only和read_only来区分校验和序列化
         - 对于choice:
+        
          ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-13%20085849.png)
          ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-13%20090246.png)
         - 对于ForeignKey:
+        
          ![](rest_framework/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-13%20090742.png)
         - 对于ManyToMany:举一反三，方法同上
 4. **分页**

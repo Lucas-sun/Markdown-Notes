@@ -200,3 +200,143 @@ try {
 }
 ```
 
+```dart
+// for
+for (int i = 0; i < 5; i++) {
+  print(i);
+}
+
+// while
+int i = 0;
+while (i < 5) {
+  print(i);
+  i++;
+}
+
+// do-while
+int i = 0;
+do {
+  print(i);
+  i++;
+} while (i < 5);
+```
+
+```dart
+// List常用属性和方法
+List numbers = [1, 2, 3, 4, 5];
+numbers.length; // 5
+numbers.isEmpty; // false
+numbers.isNotEmpty; // true
+numbers.first; // 1
+numbers.last; // 5
+numbers.reversed; // [5, 4, 3, 2, 1]
+numbers.add(6); // [1, 2, 3, 4, 5, 6]
+numbers.addAll([7, 8, 9]); // [1, 2, 3, 4, 5, 6, 7, 8, 9]
+numbers.remove(3); // [1, 2, 4, 5, 6]
+numbers.insert(1, 10); // [1, 10, 2, 4, 5, 6]
+numbers.removeWhere((num) => num > 3); // [1, 10, 2, 4]
+numbers.removeLast(); // [1, 10, 2, 4]
+numbers.removeAt(1); // [1, 2, 4]
+numbers.clear(); // []
+numbers.contains(3); // true
+numbers.indexOf(3); // 2
+numbers.toSet(); // {1, 2, 3, 4, 5}
+numbers.join(","); // "1,2,3,4,5"
+numbers.map((num) => num * 2).toList(); // [2, 4, 6, 8, 10]
+numbers.where((num) => num > 3).toList(); // [4, 5]
+numbers.any((num) => num > 3); // true
+numbers.every((num) => num > 0); // true
+numbers.fold(0, (prev, curr) => prev + curr); // 15
+numbers.forEach((num) => print(num)); // 1 2 3 4 5
+var newNumbers = numbers.map((num){ return num * 2; }).toList(); // [2, 4, 6, 8, 10]
+```
+
+```dart
+// 函数
+void sayHello() {
+  print("Hello, World!");
+}
+
+sayHello();
+
+// 带参数的函数
+void sayHello(String name) {
+  print("Hello, $name!");
+}
+
+sayHello("Lucas");
+
+// 可选参数
+void sayHello(String name, String greeting = "Hello") {
+  print("$greeting, $name!");
+}
+
+sayHello("Lucas"); // Hello, Lucas!
+sayHello("Lucas", "Hi"); // Hi, Lucas!
+// 命名参数
+sayHello(name: "Lucas"); // Hello, Lucas!
+sayHello(name: "Lucas", greeting: "Hi"); // Hi, Lucas!
+
+// 匿名函数
+void main() {
+  var printNum = (int num) {
+    print(num);
+  };
+}
+
+// 自执行函数
+void main() {
+  (() {
+    print("Hello, World!");
+  })();
+}
+```
+
+```dart
+// 闭包
+// 1.全局变量特点：常驻内存，污染全局
+// 2.局部变量特点：不常驻内存，会被垃圾回收机制回收，不污染全局
+// 3.闭包特点：函数嵌套函数，内部函数可以访问外部函数的变量
+fn() {
+  var a = 123;
+  return () {
+    a++;
+    print(a);
+  };
+}
+
+var f = fn();
+f(); // 124
+f(); // 125
+```
+
+```dart
+// 面向对象编程的三个基本特征是：封装、继承和多态。
+// Dart所有对象都继承自object类
+// Dart是一门使用类和单继承的面向对象语言，所有对象都是类的实例，并且所有的类都是object的子类。
+// 类
+class Person { // 类名采用驼峰命名法，首字母大写
+  String name;
+  int age;
+  double height;
+
+  void sayHello() {
+    print("Hello, my name is ${this.name}, I am ${this.age} years old, and my height is ${this.height} meters.");
+  }
+}
+
+// 构造函数
+class Person {
+  String name;
+  int age;
+  double height;
+
+  Person(this.name, this.age, this.height){
+    print("Person created.");
+  }
+
+  void sayHello() {
+    print("Hello, my name is $name, I am $age years old, and my height is $height meters.");
+  }
+}
+

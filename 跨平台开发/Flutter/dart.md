@@ -19,6 +19,10 @@ Dart由谷歌开发，它可以被用于web、服务器、移动应用和物联�
 
 ### 基础语法
 
+> [!NOTE]
+>
+> dart程序文件是以.dart结尾的
+
 ```dart
 // dart程序入口
 main() {
@@ -242,6 +246,8 @@ numbers.contains(3); // true
 numbers.indexOf(3); // 2
 numbers.toSet(); // {1, 2, 3, 4, 5}
 numbers.join(","); // "1,2,3,4,5"
+
+/*箭头函数左边是参数，右边是返回值*/
 numbers.map((num) => num * 2).toList(); // [2, 4, 6, 8, 10]
 numbers.where((num) => num > 3).toList(); // [4, 5]
 numbers.any((num) => num > 3); // true
@@ -327,16 +333,78 @@ class Person { // 类名采用驼峰命名法，首字母大写
 
 // 构造函数
 class Person {
-  String name;
-  int age;
-  double height;
+    String name;
+    int age;
+    double height;
 
-  Person(this.name, this.age, this.height){
-    print("Person created.");
-  }
+    //默认构造函数 只允许定义一个
+    Person(this.name, this.age, this.height){
+    	print("Person created.");
+    }
+    
+    //命名构造函数 可以定义多个
+    Person.now(){
+        print("Person now status.")
+    }
 
-  void sayHello() {
-    print("Hello, my name is $name, I am $age years old, and my height is $height meters.");
-  }
+    void sayHello() {
+        print("Hello, my name is $name, I am $age years old, and my height is $height meters.");
+    }
 }
+
+
+```
+
+
+
+#### 类抽象为模块
+
+```dart
+/* ./lib/Person.dart */
+class Person{
+    String name;
+    int age;
+    
+    Person(this.name, this.age);
+    void printInfo(){
+        print("${this.name}->${this.age}")
+    }
+}
+
+/* ./main.dart */
+import 'lib/Person.dart';
+
+void main(){
+    Person p1 = new Person("Jenny", 20);
+    p1.printInfo();
+}
+```
+
+
+
+#### Dart中的私有方法和私有属性
+
+```dart
+/*
+Dart和其他面向对象语言不一样，它没有public private protected等访问修饰符
+但可以用和python类似的'_'把一个属性或者方法定义成私有
+*/
+
+class Animal{
+    String name;
+    int _age;
+    
+    Animal(this.name, this._age);
+    
+    void printInfo(){
+        print("${this.name}->${this._age}");
+    }
+}
+
+void main(){
+    Animal a = new Animal("dog", 3);
+    print(a.name); // 公有属性 可以直接访问
+    print(a._age); // 私有属性 如果类和main函数在一个文件中，那么私有属性也是可以访问的，如果要是将这个类抽象成另外一个文件，那么私有属性就不可以访问了
+}
+```
 

@@ -408,3 +408,136 @@ void main(){
 }
 ```
 
+
+
+#### getter和setter修饰符使用
+
+```dart
+class Rect{
+    num height;
+    num width;
+    Rect(this.height, this.width);
+    // Rect():height=2,width=10{}  // 实例化之前先给属性赋值 就是初始化赋值
+    get area{
+        return this.height * this.width;
+    }
+    set areaHeight(value){
+        this.height = value;
+    }
+}
+
+void main(){
+    Rect rect = new Rect(20, 2);
+    print(rect.area); //40
+    
+    rect.areaHeight = 40;
+    print(rect.area); //80
+}
+```
+
+
+
+#### 类的详细使用方法
+
+```dart
+/*
+dart中的静态成员：
+	1.使用static关键字来实现类级别的变量和函数
+	2.静态方法不能访问非静态成员，非静态方法可以访问静态成员
+*/
+class Person{
+    static String name = "zhangsan";
+    int age = 20;
+    static void show(){
+        print(name);
+    }
+    void printInfo(){
+        print(name + age);
+    }
+}
+void main(){
+    Person.show(); // zhangsan
+    
+    new Person().printInfo(); // zhangsan20
+}
+
+/*
+Dart中的对象操作符：
+	？ 条件运算符
+	as 类型转换
+	is 类型判断
+	.. 级联操作
+*/
+void main(){
+    Person p;
+    p?.printInfo(); // 如果p是空的，那么就不会调用printInfo方法
+    
+    if(p is Person){
+        p.name = "lisi";
+    }
+    
+    var p1;
+    p1 = "";
+    p1 = new Person();
+    // p1.printInfo(); // 这里可能会报错，因为程序并不知道p1到底是什么类型的变量
+    (p1 as Person).printInfo();
+    
+    Person p2 = new Person();
+    p1.printInfo(); // zhangsan20
+    
+    p1..name = "lisi" // 级联操作
+      ..age = 30
+      ..printInfo(); // lisi30
+    
+}
+```
+
+
+
+#### 类的继承
+
+```dart
+/*
+类的继承：
+	1.子类使用extends关键字来继承父类
+	2.子类会继承父类里面可见的属性和方法，但不会继承构造函数
+	3.子类可以复写父类的方法 getter和setter
+*/
+class Person{
+    String name = "zhangsan";
+    int age = 20;
+    void printInfo(){
+        print(name + age);
+    }
+}
+
+class Web extends Person{
+    
+}
+
+void main(){
+    Web w = new Web();
+    print(w.name); // zhangsan
+    w.printInfo(); // zhangsan20
+}
+
+//---------------------------------------------------------------------------
+
+class Animal{
+    String name;
+    int age;
+    Animal(this.name, this.age);
+    void printInfo(){
+        print("${this.name}---${this.age}");
+    }
+}
+
+class Dog extends Animal{
+    Dog(String name, num age): super(name, age); // 当创建类的对象时候，先执行一遍父类的构造函数
+}
+
+void main(){
+    
+}
+```
+

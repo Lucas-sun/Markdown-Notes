@@ -534,10 +534,54 @@ class Animal{
 
 class Dog extends Animal{
     Dog(String name, num age): super(name, age); // 当创建类的对象时候，先执行一遍父类的构造函数
+    
+    /*覆写父类的方法*/
+    @override
+    void printInfo(){
+        print("姓名：${this.name}---->年龄：${this.age}");
+    }
+    
+    @override
+    void printInfo2(){
+        super.printInfo()
+    }
+}
+```
+
+
+
+#### 抽象类
+
+```dart
+/*
+抽象类主要用于定义标准，子类可以继承抽象类，也可实现抽象类接口
+	1.抽象类通过abstract 关键字来定义
+	2.抽象方法不能用abstract声明，Dart中没有方法体的方法称为抽象方法
+	3.如果子类继承抽象类必须得实现里面的抽象方法
+	4.若把抽象类当作接口实现必须实现抽象类里面定义的所有方法和属性
+	5.抽象类不能实例化，只有继承他的子类可以
+extends抽象类和 implements的区别
+	1.如果要复用抽象类里面的方法，并且要用抽象方法约束子类的话，就用extends继承抽象类
+	2.如果只是把抽象类当作标准的话我们就用implements实现抽象类
+*/
+
+abstract class Animal{
+    eat(); // 抽象方法，主要用于约束子类
+    printInfo(){
+        print('我是一个抽象类里面的普通方法');
+    }
+}
+
+class Mao extends Animal{
+    @override
+    eat(){
+        return "肉";
+    }
 }
 
 void main(){
-    
+    mao m = new Mao();
+    print(mao.eat());
 }
 ```
 

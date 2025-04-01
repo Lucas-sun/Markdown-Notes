@@ -1,6 +1,4 @@
-# Flutter
-
-## Dart 语法
+# Dart 语法
 
 Dart由谷歌开发，它可以被用于web、服务器、移动应用和物联网等领域开发。
 
@@ -10,14 +8,14 @@ Dart由谷歌开发，它可以被用于web、服务器、移动应用和物联�
 
 [官网：https://dart.dev/](https://dart.dev/)
 
-### 环境搭建
+## 环境搭建
 
 [推荐方式]
 
 - windows：进入官网，或者直接点击[下载地址](https://dart.dev/get-dart#install)
 - macos：跟随官网安装说明安装，利用homebrew安装
 
-### 基础语法
+## 一、基础语法
 
 > [!NOTE]
 >
@@ -273,13 +271,17 @@ void sayHello(String name) {
 sayHello("Lucas");
 
 // 可选参数
-void sayHello(String name, String greeting = "Hello") {
+void sayHello(String name, [String greeting = "Hello"]) {
   print("$greeting, $name!");
 }
 
 sayHello("Lucas"); // Hello, Lucas!
 sayHello("Lucas", "Hi"); // Hi, Lucas!
+
 // 命名参数
+void sayHello({String name, String greeting = "Hello"}) {
+  print("$greeting, $name!");
+}
 sayHello(name: "Lucas"); // Hello, Lucas!
 sayHello(name: "Lucas", greeting: "Hi"); // Hi, Lucas!
 
@@ -357,7 +359,7 @@ class Person {
 
 
 
-#### 类抽象为模块
+## 二、类抽象为模块
 
 ```dart
 /* ./lib/Person.dart */
@@ -382,7 +384,7 @@ void main(){
 
 
 
-#### Dart中的私有方法和私有属性
+## 三、Dart中的私有方法和私有属性
 
 ```dart
 /*
@@ -410,7 +412,7 @@ void main(){
 
 
 
-#### getter和setter修饰符使用
+## 四、getter和setter修饰符使用
 
 ```dart
 class Rect{
@@ -437,7 +439,7 @@ void main(){
 
 
 
-#### 类的详细使用方法
+## 五、类的详细使用方法
 
 ```dart
 /*
@@ -494,7 +496,7 @@ void main(){
 
 
 
-#### 类的继承
+## 六、类的继承
 
 ```dart
 /*
@@ -550,7 +552,7 @@ class Dog extends Animal{
 
 
 
-#### 抽象类
+## 七、抽象类
 
 ```dart
 /*
@@ -565,6 +567,11 @@ extends抽象类和 implements的区别
 	2.如果只是把抽象类当作标准的话我们就用implements实现抽象类
 */
 
+/*
+Dart中的多态
+	多态就是父类定义一个方法不去实现，让继承他的子类去实现，每个子类有不同的表现
+*/
+
 abstract class Animal{
     eat(); // 抽象方法，主要用于约束子类
     printInfo(){
@@ -577,11 +584,316 @@ class Mao extends Animal{
     eat(){
         return "肉";
     }
+    run(){
+        return "pao";
+    }
 }
 
 void main(){
     mao m = new Mao();
     print(mao.eat());
+    
+    Animal a = new Mao();
+    // a.run() 方法不存在
+}
+```
+
+
+
+## 八、接口
+
+```dart
+/*
+Dart中的接口
+	dart的接口没有interface关键字定义接口，普通类或者抽象类都可以作为接口实现。同样使用implements关键字进行实现。
+	但是Dart的接口有点奇怪，如果实现的类是普通类，会将普通类和抽象中的属性的方法全部需要复写一遍。
+	建议使用抽象类定义接口。
+*/
+
+abstract class Db{
+    String url;
+    add();
+}
+
+class Mysql implements Db{
+    @override
+    String url;
+    
+    Mysql(this.url);
+    
+    @override
+    add(){
+        return "xxx";
+    }
+}
+
+class Mssql implements Db{
+    @override
+    String url;
+    @override
+    add(){
+        return "xxx";
+    }
+}
+
+class MongoDb implements Db{
+    @override
+    String url;
+    @override
+    add(){
+        return "xxx";
+    }
+}
+```
+
+
+
+### 1.实现多个接口
+
+```dart
+abstract class A{
+    String name;
+    printA();
+}
+
+abstract class B{
+    printB();
+}
+
+class C implements A, B{
+    @override
+    String name;
+    
+    @override
+    printA(){
+        return "xxx";
+    }
+    @override
+    printB(){
+        return "xxx";
+    }
+}
+```
+
+### 2.mixins
+
+```dart
+/*
+在Dart中使用mixins可以实现类似多继承的功能
+这里讲的是Dart2.x的mixins条件
+	1.作为mixins的类只能继承自Object，不能继承其他类
+	2.作为mixins的类不能有构造函数
+	3.一个类可以mixins多个mixins类
+	4.mixins不是继承，也不是接口，而是一种全新的特性
+*/
+class Person{
+    String name;
+    Person(this.name);
+    printInfo(){
+        print("${this.name}")
+    }
+}
+
+class A{
+    void printA(){
+        print("A");
+    }
+}
+
+class B{
+    void printB(){
+        print("B");
+    }
+}
+
+class C extends Person with A, B{
+    c(String name): super(name)
+}
+
+void main(){
+    var c = new C("xxx");
+    c.printA();
+    c.printB();
+    c.printInfo();
+}
+```
+
+
+
+## 八、泛型
+
+```dart
+/*
+泛型就是解决 类、接口、方法的复用性，以及对不特定数据类型的支持(类型校验)
+*/
+
+// 传入什么类型返回什么类型
+T getData<T>(T value){ // 泛型方法书写格式
+    return value;
+}
+
+void main(){
+    getData(123); // 无数据类型校验
+    getData<String>(""); // 数据类型必须是String
+}
+
+// 泛型类
+class MyList<T>{
+    List list = <T>[];
+    void add(T value){
+        this.list.add(value);
+    }
+    List getList(){
+        return list;
+    }
+}
+main(){
+    List list = new List<String>.filled(2, ""); // 创建了元素类型必须是String的列表
+    
+    MyList l1 = new MyList();
+    MyList l2 = new MyList<String>();
+}
+```
+
+
+
+## 九、Dart库
+
+```dart
+/*
+Dart的库主要有三种
+	1.自定义的库
+		import 'lib/xx.dart';
+	2.pub包管理系统中的库
+		https://pub.dev/packages
+		https://pub.flutter-io.cn/packages
+		https://pub.dartlang.org/flutter
+	3.系统内置库
+		import 'dart:math';
+		import 'dart:io';
+*/
+
+/*
+async和await
+	要注意两点：
+		1.只有async方法才能使用await方法
+		2.调用async方法必须使用await关键字
+	async是让方法变成异步方法
+	await是等待异步方法执行完成
+*/
+
+/*
+导入pub库
+	1.新建pubspec.yaml 
+		name: xxx
+		description: A new flutter module project.
+		dependencies:
+			http: ^1.3.0
+	2.在pubspec目录下执行dart pub get
+		或者根据网址的教程做
+*/
+```
+
+
+
+## 十、空安全、类型断言和late、required关键字
+
+```dart
+String? username = "zhangsan"; // String? 表示username是一个可空类型
+
+String? getData(apiUrl){
+    if(apiUrl!=null){
+        return "this is server data";
+    }
+    return null;
+}
+
+/*
+类型断言
+*/
+String? = "this is str";
+str = null;
+print(str!.length); // 这就是类型断言，允许空操作，会抛出异常
+
+/*
+late关键字，主要用于延迟初始化
+*/
+class Person{
+    // String name;
+    // int age;  这里由于没有在构造函数中做初始化，可能会导致get方法出问题，所以需要延迟初始化
+    late String name;
+    late int age;
+    
+    void set(name, age){
+        this.name = name;
+        this.age = age;
+    }
+    void get(){
+        return "${this.name}--->${this.age}"
+    }
+}
+
+/*
+required关键字
+	主要用于根据需要标记任何命名参数(函数或类)，使得他们不为空，因为可选参数中必须有个required
+*/
+String User(String username, {required int age, required String sex}){
+    if (age != 0){
+        return "${username}===$age===$sex";
+    }
+    return "${username}===年龄保密===$sex"
+}
+```
+
+
+
+## 十一、常量、identical函数和常量构造函数
+
+```dart
+/*
+Dart常量：final和const修饰符
+	const声明的常量是在编译时确定的，永远不会改变
+	final声明的常量允许声明后再赋值，赋值后不可改变
+	final不仅有const的便宜时常量的特性，最重要的是它是运行时常量，并且final是惰性初始化
+*/
+
+/*
+dart:core库中identical函数的用法介绍如下
+	bool identical(Object? a, Object? b)
+	检查两个引用是否指向同一个对象
+*/
+void main(){
+    var o1 = Object();
+    var o2 = Object();
+    print(identical(o1, o2)); // false
+    print(identical(o1, o1)); // true
+    
+    var o1 = const Object();
+    var o2 = const Object();
+    print(identical(o1, o2)); // true
+    // const 关键字在多个地方创建相同的对象的时候，内存中只保留了一个对象
+}
+
+/*
+常量构造函数
+	1.常量构造函数需以const关键字修饰
+	2.const构造函数必须用于成员变量都是final的类
+	3.如果实例化时不加const修饰符，即使调用的是常量构造函数，实例化的对象也不是常量
+	4.Flutter中const修饰不仅仅是节省组件构建是的内存开销，Flutter在需要重新构建组件时候不会重新构建const组件
+*/
+class Container{
+    final int width;
+    final int height;
+    const Container({required this.width, required this.height});
+}
+
+void main(){
+    var c1 = Container(width:100, height: 100);
+    var c2 = Container(width:100, height: 100);
+    identical(c1, c2); // false
+    var c3 = const Container(width:100, height: 100);
+    var c4 = const Container(width:100, height: 100);
+    identical(c3, c4); // true
 }
 ```
 

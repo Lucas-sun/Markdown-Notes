@@ -811,7 +811,7 @@ String? getData(apiUrl){
 /*
 类型断言
 */
-String? = "this is str";
+String? str = "this is str";
 str = null;
 print(str!.length); // 这就是类型断言，允许空操作，会抛出异常
 

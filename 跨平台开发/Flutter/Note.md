@@ -195,7 +195,7 @@ class MyApp extends StatelessWidget{
 
 ##### 效果展示
 
-<img src="C:\Users\mmt\Documents\GitHub\Markdown-Notes\跨平台开发\Flutter\flutter\容器展示.png" alt="容器展示" style="zoom: 50%;" />
+<img src="./flutter/容器展示.png" alt="容器展示" style="zoom:67%;" />
 
 #### 按钮效果
 
@@ -282,7 +282,9 @@ class MyButton extends StatelessWidget{
 
 ##### 效果展示
 
-<img src="C:\Users\mmt\Documents\GitHub\Markdown-Notes\跨平台开发\Flutter\flutter\按钮效果.png" alt="按钮效果" style="zoom: 50%;" />
+<img src="./flutter/按钮效果.png" alt="按钮效果" style="zoom:67%;" />
+
+****
 
 #### Text组件
 
@@ -333,7 +335,7 @@ class MyText extends StatelessWidget{
 
 ##### 效果展示
 
-![Text组件](C:\Users\mmt\Documents\GitHub\Markdown-Notes\跨平台开发\Flutter\flutter\Text组件.png)
+![Text组件](./flutter/Text组件.png)
 
 ### B.Flutter图片组件Image
 
@@ -398,7 +400,7 @@ class MyApp extends StatelessWidget{
 
 ##### 效果展示
 
-<img src="C:\Users\mmt\Documents\GitHub\Markdown-Notes\跨平台开发\Flutter\flutter\图片显示.png" alt="图片显示" style="zoom:50%;" />
+<img src="./flutter/图片显示.png" alt="图片显示" style="zoom:67%;" />
 
 #### 圆角图片
 
@@ -431,7 +433,7 @@ class Circular extends StatelessWidget{
 
 ###### 效果展示
 
-![Container圆角图片](C:\Users\mmt\Documents\GitHub\Markdown-Notes\跨平台开发\Flutter\flutter\Container圆角图片.png)
+<img src="./flutter/Container圆角图片.png" alt="Container圆角图片" style="zoom:67%;" />
 
 ##### ClipOval实现
 
@@ -457,7 +459,7 @@ class ClipCircular extends StatelessWidget{
 
 ###### 效果展示
 
-<img src="C:\Users\mmt\Documents\GitHub\Markdown-Notes\跨平台开发\Flutter\flutter\clipOval圆角图片.png" alt="clipOval圆角图片"  />
+![clipOval圆角图片](./flutter/clipOval圆角图片.png)
 
 #### Image.asset 加载本地图片
 
@@ -491,7 +493,7 @@ class LoadLocalImage extends StatelessWidget{
 
 ##### 效果展示
 
-<img src="C:\Users\mmt\Documents\GitHub\Markdown-Notes\跨平台开发\Flutter\flutter\加载本地图片.png" alt="加载本地图片"  />
+![加载本地图片](./flutter/加载本地图片.png)
 
 ### C.Flutter ICON图标组件
 
@@ -546,7 +548,7 @@ class MyHomepage extends StatelessWidget{
 
 ##### 效果展示
 
-![内置图标](C:\Users\mmt\Documents\GitHub\Markdown-Notes\跨平台开发\Flutter\flutter\内置图标.png)
+![内置图标](./flutter/内置图标.png)
 
 #### 自定义图标
 
@@ -579,3 +581,290 @@ class MyIcons{
 
 ### D.ListView组件
 
+#### 快速使用
+
+> [!NOTE]
+>
+> 这样可以保证当容器内组件数量或者大小超出屏幕范围可以上下左右滚动，而不是警告
+
+```dart
+class MyHomepage extends StatelessWidget{
+  MyHomepage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        SizedBox(height: 20,),
+        Icon(Icons.home, color: Colors.red,),
+        Icon(Icons.settings,),  // 这些都是内置图标
+        Icon(Icons.search),
+        Icon(Icons.personal_injury_outlined),
+        Icon(Icons.category_outlined, size: 60,),
+        Icon(Icons.bluetooth_audio),
+        Icon(Icons.wechat, color: Colors.green, size: 120,),
+        Icon(Icons.home, color: Colors.red,),
+        Icon(Icons.settings,),  // 这些都是内置图标
+        Icon(Icons.search),
+        Icon(Icons.personal_injury_outlined),
+        Icon(Icons.category_outlined, size: 60,),
+        Icon(Icons.bluetooth_audio),
+        Icon(Icons.wechat, color: Colors.green, size: 120,),
+        Icon(Icons.home, color: Colors.red,),
+        Icon(Icons.settings,),  // 这些都是内置图标
+        Icon(Icons.search),
+        Icon(Icons.personal_injury_outlined),
+        Icon(Icons.category_outlined, size: 60,),
+        Icon(Icons.bluetooth_audio),
+        Icon(Icons.wechat, color: Colors.green, size: 120,),
+      ],
+    );
+  }
+}
+```
+
+#### 常用属性
+
+列表布局是我们项目开发中最常用的一种布局方式。Flutter中我们可以通过ListView来定义列表项，支持垂直和水平方向展示。通过一个属性就可以控制列表的显示方向，列表有以下分类：
+
+1. 垂直列表
+2. 垂直图文列表
+3. 水平列表
+4. 动态列表
+
+|      名称       | 类型                | 说明                                               |
+| :-------------: | ------------------- | -------------------------------------------------- |
+| scrollDirection | Axis                | Axis.horizontal水平列表<br />Axis.vertical垂直列表 |
+|     padding     | EdgeInsertsGeometry | 内边距                                             |
+|     resolve     | bool                | 组件反向排序                                       |
+|    children     | List                | 列表元素                                           |
+
+##### 垂直列表
+
+###### 代码示例01
+
+```dart
+import 'package:flutter/material.dart';
+
+void main(){
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget{
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.blue, // 明显的是主题颜色
+      ),
+      home: Scaffold(
+        appBar: AppBar(title: Text("qwea接外圈刮"),),
+        body: MyHomepage(),
+      ),
+    );
+  }
+}
+
+class MyHomepage extends StatelessWidget{
+  MyHomepage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: <Widget>[
+        ListTile(title: Text("我是列表")),  // 一般和ListView配合使用
+        Divider(),  // 横线 分割线
+        ListTile(title: Text("我是列表")),
+        Divider(),
+        ListTile(title: Text("我是列表")),
+        Divider(),
+        ListTile(title: Text("我是列表")),
+        Divider(),
+        ListTile(title: Text("我是列表")),
+        Divider(),
+        ListTile(title: Text("我是列表")),
+        Divider(),
+        ListTile(title: Text("我是列表")),
+        Divider(),
+        ListTile(title: Text("我是列表")),
+        Divider(),
+        ListTile(title: Text("我是列表")),
+        Divider(),
+        ListTile(title: Text("我是列表")),
+        Divider(),
+        ListTile(title: Text("我是列表")),
+        Divider(),
+        ListTile(title: Text("我是列表")),
+        Divider(),
+      ],
+    );
+  }
+}
+```
+
+###### 效果展示01
+
+<img src="./flutter/ListView示例01.png" alt="ListView示例01" style="zoom:60%;" />
+
+###### 代码示例02
+
+```dart
+class MyHomepage extends StatelessWidget{
+  MyHomepage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: EdgeInsets.all(10),
+      children: <Widget>[
+        Divider(),
+        ListTile(
+          leading: Image.network("https://gips3.baidu.com/it/u=3526938358,3379384930&fm=3028&app=3028&size=w931&q=75&n=0&f=PNG&fmt=auto&maxorilen2heic=2000000"),
+          title: Text("特朗普：让加拿大加入美国没开玩笑"),
+          subtitle: Text("报道称，特朗普在25日发布于《时代》周刊的专访报道中作出上述表态。当主持人在采访中提及，特朗普曾多次提出让加拿大并入美国", overflow: TextOverflow.ellipsis,), // 二级标题
+          trailing: Image.network("https://gips3.baidu.com/it/u=3526938358,3379384930&fm=3028&app=3028&size=w931&q=75&n=0&f=PNG&fmt=auto&maxorilen2heic=2000000"),
+        ),
+        Divider(),
+      ],
+    );
+  }
+}
+```
+
+###### 效果展示02
+
+<img src="./flutter/ListView示例02.png" alt="ListView示例02" style="zoom:60%;" />
+
+##### 垂直图文列表
+
+###### 代码示例
+
+```dart
+class MyHomepage extends StatelessWidget{
+  MyHomepage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      // padding: EdgeInsets.all(10),
+      children: <Widget>[
+        Image.network("https://gips3.baidu.com/it/u=3526938358,3379384930&fm=3028&app=3028&size=w931&q=75&n=0&f=PNG&fmt=auto&maxorilen2heic=2000000"),
+        SizedBox(
+          height: 44,
+          child: Text("川普：我是一个傻逼", textAlign: TextAlign.center, style: TextStyle(fontSize: 18),),
+        ),
+        Image.network("https://gips3.baidu.com/it/u=3526938358,3379384930&fm=3028&app=3028&size=w931&q=75&n=0&f=PNG&fmt=auto&maxorilen2heic=2000000"),
+        Image.network("https://gips3.baidu.com/it/u=3526938358,3379384930&fm=3028&app=3028&size=w931&q=75&n=0&f=PNG&fmt=auto&maxorilen2heic=2000000"),
+        Image.network("https://gips3.baidu.com/it/u=3526938358,3379384930&fm=3028&app=3028&size=w931&q=75&n=0&f=PNG&fmt=auto&maxorilen2heic=2000000"),
+        Image.network("https://gips3.baidu.com/it/u=3526938358,3379384930&fm=3028&app=3028&size=w931&q=75&n=0&f=PNG&fmt=auto&maxorilen2heic=2000000"),
+        Image.network("https://gips3.baidu.com/it/u=3526938358,3379384930&fm=3028&app=3028&size=w931&q=75&n=0&f=PNG&fmt=auto&maxorilen2heic=2000000"),
+        Image.network("https://gips3.baidu.com/it/u=3526938358,3379384930&fm=3028&app=3028&size=w931&q=75&n=0&f=PNG&fmt=auto&maxorilen2heic=2000000"),
+        Image.network("https://gips3.baidu.com/it/u=3526938358,3379384930&fm=3028&app=3028&size=w931&q=75&n=0&f=PNG&fmt=auto&maxorilen2heic=2000000"),
+        Image.network("https://gips3.baidu.com/it/u=3526938358,3379384930&fm=3028&app=3028&size=w931&q=75&n=0&f=PNG&fmt=auto&maxorilen2heic=2000000"),
+      ],
+    );
+  }
+}
+```
+
+###### 效果展示
+
+<img src="./flutter/垂直图文列表.png" alt="垂直图文列表" style="zoom:60%;" />
+
+##### 水平列表
+
+###### 代码示例
+
+```dart
+class MyHomepage extends StatelessWidget{
+  MyHomepage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(height: 20, child: ListView(  // 在外层设置才可以有效果
+      scrollDirection: Axis.horizontal, // 水平列表
+      children: [
+        Container(
+          height: 120,  // 在水平列表中高度自适应，设置没有效果
+          width: 120,  // 在垂直列表中宽度自适应，设置没有效果
+          decoration: BoxDecoration(
+            color: Colors.red,
+          ),
+        ),
+        Container(
+          height: 120,
+          width: 120,
+          decoration: BoxDecoration(
+            color: Colors.pink,
+          ),
+        ),
+        Container(
+          height: 120,
+          width: 120,
+          decoration: BoxDecoration(
+            color: Colors.indigo,
+          ),
+        ),
+        Container(
+          height: 120,
+          width: 120,
+          decoration: BoxDecoration(
+            color: Colors.yellowAccent,
+          ),
+        ),
+        Container(
+          height: 120,
+          width: 120,
+          decoration: BoxDecoration(
+            color: Colors.redAccent,
+          ),
+        ),
+        Container(
+          height: 120,
+          width: 120,
+          decoration: BoxDecoration(
+            color: Colors.amber,
+          ),
+        ),
+        Container(
+          height: 120,
+          width: 120,
+          decoration: BoxDecoration(
+            color: Colors.cyan,
+          ),
+        ),
+        Container(
+          height: 120,
+          width: 120,
+          decoration: BoxDecoration(
+            color: Colors.black87,
+          ),
+        ),
+        Container(
+          height: 120,
+          width: 120,
+          decoration: BoxDecoration(
+            color: Colors.grey,
+          ),
+        ),
+      ],
+    ));
+  }
+}
+```
+
+###### 效果展示
+
+<img src="./flutter/水平列表.png" alt="水平列表" style="zoom:67%;" />
+
+##### 动态列表
+
+###### 代码展示
+
+```dart
+
+```
+
+###### 效果展示

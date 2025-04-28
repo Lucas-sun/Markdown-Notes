@@ -779,7 +779,7 @@ class MyHomepage extends StatelessWidget{
 
 ```dart
 class MyHomepage extends StatelessWidget{
-  MyHomepage({super.key});
+  const MyHomepage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -864,7 +864,354 @@ class MyHomepage extends StatelessWidget{
 ###### 代码展示
 
 ```dart
+class MyHomepage extends StatelessWidget{
+  const MyHomepage({super.key});
 
+  List<Widget> _initLivedata(){
+    List<Widget> list = [];
+    for (var i=0; i<20; i++){
+      list.add(ListTile(
+        title: Text("I'm a dynamic list$i!"),
+      ));
+      list.add(Divider());
+    }
+    return list;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(  // 通过循环展示列表，即动态列表
+      children: _initLivedata(),
+    );
+  }
+}
+
+// Another method
+class MyHomepage extends StatelessWidget{
+  List<String> list = [];
+  MyHomepage({super.key}){
+    for (var i=0;i<20;i++){
+      list.add("I'm ${i}th dynamic data.");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: list.length,
+      itemBuilder: (context, index){
+        return ListTile(title: Text(list[index]),);
+      },
+    );
+  }
+}
 ```
 
 ###### 效果展示
+
+<img src="./flutter/动态列表.png" alt="动态列表" style="zoom:60%;" />
+
+### E.GridView组件
+
+<img src="./flutter/list和grid组件比对.png" alt="list和grid组件比对" style="zoom:60%;" />
+
+#### Grid创建网格列表主要有三种方式
+
+1. 可以通过GridView.count实现网格布局
+2. 可以通过GridView.extent实现网格布局
+3. 通过GridView.builder实现动态网格布局
+
+#### 常用属性
+
+| 名称              | 类型                                                         | 说明                                 |
+| ----------------- | ------------------------------------------------------------ | ------------------------------------ |
+| scrollDirection   | Axis                                                         | 滚动方法                             |
+| padding           | EdgeInsetsGeometry                                           | 内边距                               |
+| resolve           | bool                                                         | 组件反向排序                         |
+| crossAxisSpacing  | double                                                       | 水平子widget之间间距                 |
+| mainAxisSpacing   | double                                                       | 垂直子widget之间间距                 |
+| crossAxisCount    | int用在GridView.count                                        | 一行的Widget数据                     |
+| maxCrossAxisCount | double用在GridView.extent                                    | 横轴子元素的最大长度                 |
+| childAspectRatio  | double                                                       | 子widget宽度比例                     |
+| children          |                                                              | []                                   |
+| gridDelegate      | SliverGridDelegateWithFixedCrossAxisCount<br />SliverGridDelegateWithMaxCrossAxisExtent | 控制布局主要用在GridView.builder里面 |
+
+#### GridView.count
+
+```dart
+import 'package:flutter/material.dart';
+
+void main(){
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget{
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: "Flutter Demo",
+      theme: ThemeData(
+        primarySwatch: Colors.blue, // 明显的是主题颜色
+      ),
+      home: Scaffold(
+        appBar: AppBar(title: Text("Hello, World"),),
+        body: MyHomepage(),
+      ),
+    );
+  }
+}
+
+class MyHomepage extends StatelessWidget{
+  const MyHomepage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.count(
+      crossAxisCount: 10,
+      children: [
+        Icon(Icons.pedal_bike),
+        Icon(Icons.home),
+        Icon(Icons.ac_unit),
+        Icon(Icons.search),
+        Icon(Icons.settings),
+        Icon(Icons.airport_shuttle),
+        Icon(Icons.all_inclusive),
+        Icon(Icons.beach_access),
+        Icon(Icons.cake),
+        Icon(Icons.circle),
+      ],
+    );
+  }
+}
+```
+
+<img src="./flutter/网格count布局.png" alt="网格count布局" style="zoom:60%;" />
+
+```dart
+// 动态生成列表
+class MyHomepage extends StatelessWidget{
+  const MyHomepage({super.key});
+
+  List<Widget> _initListData(){
+    List<Widget> list = [];
+    for (var i=0;i<13;i++){
+      list.add(
+        Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.blue
+          ),
+          child: Text("I'm the ${i}th element."),
+        )
+      );
+    }
+    return list;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.count(
+      padding: EdgeInsets.all(10),
+      crossAxisCount: 2,
+      // maxCrossAxisExtent: 150,
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      childAspectRatio: 0.6125,  // 宽高比
+      children: _initListData(),
+    );
+  }
+}
+
+// 或者map方式
+class MyHomepage extends StatelessWidget{
+  const MyHomepage({super.key});
+
+  List<Widget> _initListData(){
+    List list = [];
+    for (var i=0;i<13;i++){
+      list.add({"title":"I'm the ${i}th element."});	// 模拟服务器读出的数据
+    }
+    var tempList = list.map((value){
+      return Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Colors.amber,
+        ),
+        child: Text(value["title"]),
+      );
+    });
+    return tempList.toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.extent(
+      padding: EdgeInsets.all(10),
+      // crossAxisCount: 2,
+      maxCrossAxisExtent: 150,
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      childAspectRatio: 0.6125,  // 宽高比
+      children: _initListData(),
+    );
+  }
+}
+```
+
+
+
+#### GridView.extent
+
+```dart
+class MyHomepage extends StatelessWidget{
+  const MyHomepage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.extent(
+      // 通过它可以快速创建横轴子元素为固定最大长度的GridView
+      maxCrossAxisExtent: 120,  // 横轴子元素的最大长度
+      children: [
+        Icon(Icons.pedal_bike),
+        Icon(Icons.home),
+        Icon(Icons.ac_unit),
+        Icon(Icons.search),
+        Icon(Icons.settings),
+        Icon(Icons.airport_shuttle),
+        Icon(Icons.all_inclusive),
+        Icon(Icons.beach_access),
+        Icon(Icons.cake),
+        Icon(Icons.circle),
+      ],
+    );
+  }
+}
+```
+
+<img src="./flutter/网格布局extent.png" alt="网格布局extent" style="zoom:60%;" />
+
+```dart
+// 动态生成列表
+class MyHomepage extends StatelessWidget{
+  const MyHomepage({super.key});
+
+  List<Widget> _initListData(){
+    List<Widget> list = [];
+    for (var i=0;i<13;i++){
+      list.add(
+        Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.blue
+          ),
+          child: Text("I'm the ${i}th element."),
+        )
+      );
+    }
+    return list;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.extent(
+      padding: EdgeInsets.all(10),
+      // crossAxisCount: 2,
+      maxCrossAxisExtent: 150,
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      childAspectRatio: 0.6125,  // 宽高比
+      children: _initListData(),
+    );
+  }
+}
+```
+
+#### GridView.builder
+
+```dart
+class MyHomepage extends StatelessWidget{
+  const MyHomepage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      padding: EdgeInsets.all(10),
+      itemCount: 12,
+      // 还有SliverGridDelegateWithMaxCrossAxisExtent，作用就和extent和count差不多
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+        childAspectRatio: 0.9,
+      ),
+      itemBuilder: (context, index){
+        return Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Colors.amber,
+        ),
+        child: Column(
+          children: [
+         	 Image.network("http://gips3.baidu.com/it/u=3886271102,3123389489&fm=3028&app=3028&f=JPEG&fmt=auto?w=1280&h=960"),
+            SizedBox(height: 10),
+            Text("$index", style: TextStyle(
+              fontSize: 20,
+            ),)
+          ],
+        ),
+      );
+      },
+    );
+  }
+}
+```
+
+<img src="./flutter/builder创建GridView.png" alt="builder创建GridView" style="zoom:60%;" />
+
+### F.Flutter页面布局 Padding Row Column Flex Expanded组件详解
+
+#### padding组件
+
+在html中常见的布局标签都有padding属性，但是Flutter中很多Widget是没有padding属性，这个时候我们可以用Padding组件处理容器与子元素之间的间距。
+
+| 属性    | 说明                              |
+| ------- | --------------------------------- |
+| padding | padding值，EdgeInsets设置填充的值 |
+| child   | 子组件                            |
+
+```dart
+class MyHomepage extends StatelessWidget{
+  const MyHomepage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: Text("nihao"),
+    );
+  }
+}
+```
+
+#### Row水平组件
+
+| 属性               | 说明           |
+| ------------------ | -------------- |
+| mainAxisAlignment  | 主轴的排序方式 |
+| crossAxisAlignment | 次轴的排序方式 |
+| children           | 组件子元素     |
+
+
+
+
+
+#### Column垂直组件
+
+| 属性               | 说明           |
+| ------------------ | -------------- |
+| mainAxisAlignment  | 主轴的排序方式 |
+| crossAxisAlignment | 次轴的排序方式 |
+| children           | 组件子元素     |
+

@@ -1203,9 +1203,48 @@ class MyHomepage extends StatelessWidget{
 | crossAxisAlignment | 次轴的排序方式 |
 | children           | 组件子元素     |
 
+```dart
+class MyHomepage extends StatelessWidget{
+  const MyHomepage({super.key});
 
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity, // 无穷大，铺满整个屏幕
+      height: double.infinity,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,  // 相对于父容器
+        children: [
+          IconContainer(Icon(Icons.home), color: Colors.red,),
+          IconContainer(Icon(Icons.search), color: Colors.blue,),
+        ],
+      ),
+    );
+  }
+}
+class IconContainer extends StatelessWidget{
+  Icon icon;
+  Color color;
+  IconContainer(this.icon, {super.key, required this.color});
 
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 120,
+      width: 120,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: icon,
+    );
+  }
+}
+```
 
+<img src="./flutter/Row组件.png" alt="Row组件" style="zoom:60%;" />
 
 #### Column垂直组件
 
@@ -1214,4 +1253,147 @@ class MyHomepage extends StatelessWidget{
 | mainAxisAlignment  | 主轴的排序方式 |
 | crossAxisAlignment | 次轴的排序方式 |
 | children           | 组件子元素     |
+
+```dart
+class MyHomepage extends StatelessWidget{
+  const MyHomepage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity, // 无穷大，铺满整个屏幕
+      height: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,  // 相对于父容器
+        children: [
+          IconContainer(Icon(Icons.home), color: Colors.red,),
+          IconContainer(Icon(Icons.search), color: Colors.blue,),
+        ],
+      ),
+    );
+  }
+}
+class IconContainer extends StatelessWidget{
+  Icon icon;
+  Color color;
+  IconContainer(this.icon, {super.key, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 120,
+      width: 120,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: icon,
+    );
+  }
+}
+```
+
+<img src="./flutter/Column组件.png" alt="Column组件" style="zoom:60%;" />
+
+#### Flex弹性布局
+
+```dart
+class MyHomepage extends StatelessWidget{
+  const MyHomepage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Flex(
+      direction: Axis.vertical,
+      children: [
+        Expanded(
+          flex: 1,
+          child: IconContainer(Icon(Icons.fireplace), color: Colors.red,),  // 这个元素设置宽度是没有效果的
+        ),
+        Expanded(
+          flex: 2,
+          child: IconContainer(Icon(Icons.water_drop), color: Colors.blue,),
+        ),
+      ],
+    );
+  }
+}
+
+class IconContainer extends StatelessWidget{
+  Icon icon;
+  Color color;
+  IconContainer(this.icon, {super.key, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 120,
+      width: 120,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: icon,
+    );
+  }
+}
+```
+
+<img src="./flutter/Flex布局.png" alt="Flex布局" style="zoom:67%;" />
+
+### E.Stack层叠布局
+
+Stack表示堆的意思，我们可以用Stack或者结合Align或者Stack结合Positioned来实现页面的定位布局
+
+| 属性      | 说明                     |
+| --------- | ------------------------ |
+| alignment | 配置所有子元素的显示位置 |
+| children  | 子组件                   |
+
+Positioned组件属性
+
+| 属性   | 说明                                                         |
+| ------ | ------------------------------------------------------------ |
+| top    | 子元素距离顶部的距离                                         |
+| bottom | 子元素距离底部的距离                                         |
+| left   | 子元素距离左侧的距离                                         |
+| right  | 子元素距离右侧距离                                           |
+| child  | 子组件                                                       |
+| width  | 组件的高度（注意：宽度和高度都必须时固定值，没法使用double.infinity） |
+| height | 子组件的高度                                                 |
+
+```dart
+class MyHomepage extends StatelessWidget {
+  const MyHomepage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 400,
+      width: 300,
+      color: Colors.amber,
+      child: Stack(
+        // 注意：相对于外部容器进行定位，如果没有外部容器就相对于整个屏幕定位
+        children: [
+          Positioned(
+            left: 0,
+            bottom: 0,
+            child: Container(height: 100, width: 100, color: Colors.red),
+          ),
+          Positioned(right: 10, child: Text("你好Flutter")),
+        ],
+      ),
+    );
+  }
+}
+```
+
+<img src="./flutter/stack使用示例.png" alt="stack使用示例" style="zoom:67%;" />
+
+```dart
+
+```
 

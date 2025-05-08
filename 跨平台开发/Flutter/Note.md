@@ -1362,8 +1362,8 @@ Positioned组件属性
 | left   | 子元素距离左侧的距离                                         |
 | right  | 子元素距离右侧距离                                           |
 | child  | 子组件                                                       |
-| width  | 组件的高度（注意：宽度和高度都必须时固定值，没法使用double.infinity） |
-| height | 子组件的高度                                                 |
+| width  | **子组件**的高度（注意：宽度和高度都必须时固定值，没法使用double.infinity） |
+| height | **子组件**的高度                                             |
 
 ```dart
 class MyHomepage extends StatelessWidget {
@@ -1394,6 +1394,102 @@ class MyHomepage extends StatelessWidget {
 <img src="./flutter/stack使用示例.png" alt="stack使用示例" style="zoom:67%;" />
 
 ```dart
+class MyHomepage extends StatelessWidget {
+  const MyHomepage({super.key});
+  @override
+  Widget build(BuildContext context) {
+    // 获取设备的宽度和高度
+    final size = MediaQuery.of(context).size;
 
+    return Stack(
+      children: [
+        Positioned(
+          top: 44,
+          width: size.width,
+          height: size.height,
+          child:ListView(
+            children: [
+              ListTile(title: Text("The 1th.")),
+              ListTile(title: Text("The 2th",)),
+              ListTile(title: Text("The 3th.")),
+              ListTile(title: Text("The 4th",)),
+              ListTile(title: Text("The 5th.")),
+              ListTile(title: Text("The 6th",)),
+              ListTile(title: Text("The 7th.")),
+              ListTile(title: Text("The 8th",)),
+              ListTile(title: Text("The 9th.")),
+              ListTile(title: Text("The 10th",)),
+            ]
+          )
+        ),
+        Positioned(
+          top: 0,
+          width: size.width,
+          height: 44,
+          child: Row(
+            children: [
+              Expanded(child: Container(
+                height: 44,
+                color: Colors.red,
+                alignment: Alignment.center,
+                child: Text("Second navi", style: TextStyle(color: Colors.white),),
+              ))
+            ],
+          ),
+        )
+      ],
+    );
+  }
+}
+
+// 上述方式比较繁琐，下面是优化的方式
+class MyHomepage extends StatelessWidget {
+  const MyHomepage({super.key});
+  @override
+  Widget build(BuildContext context) {
+    // 获取设备的宽度和高度
+    final size = MediaQuery.of(context).size;
+
+    return Stack(
+      children: [
+        Positioned(
+          top: 44,
+          width: size.width,
+          height: size.height,
+          child:ListView(
+            children: [
+              ListTile(title: Text("The 1th.")),
+              ListTile(title: Text("The 2th",)),
+              ListTile(title: Text("The 3th.")),
+              ListTile(title: Text("The 4th",)),
+              ListTile(title: Text("The 5th.")),
+              ListTile(title: Text("The 6th",)),
+              ListTile(title: Text("The 7th.")),
+              ListTile(title: Text("The 8th",)),
+              ListTile(title: Text("The 9th.")),
+              ListTile(title: Text("The 10th",)),
+            ]
+          )
+        ),
+        Positioned(
+          top: 0,
+          width: size.width, // 这里可以指定子组件的高度和宽度
+          height: 44,
+          child: Container(
+                height: 44,
+                color: Colors.red,
+                alignment: Alignment.center,
+                child: Text("Second navi", style: TextStyle(color: Colors.white),),
+              )
+        )
+      ],
+    );
+  }
+}
 ```
 
+<img src="./flutter/stack二级导航.png" alt="stack二级导航" style="zoom:60%;" />
+
+#### Align组件
+
+Align组件可以调整子组件的位置，Stack组件中结合Align组件可以控制每个子元素的显示位置

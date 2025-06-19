@@ -1,4 +1,5 @@
 **目录**
+
 - [Docker](#docker)
     - [Docker入门](#docker入门)
     - [必备概念](#必备概念)
@@ -21,8 +22,9 @@
     - [给容器指定ip](#给容器指定ip)
     - [安装nginx](#安装nginx)
     - [安装uwsgi](#安装uwsgi)
-## Docker
-#### Docker入门
+# Docker
+
+## Docker入门
 1. docker是什么？
    - docker就是一个**软件**，支持在win、mac、linux系统上安装
    - 可以在一台电脑上根据**模板**创建出多个**隔离的环境**，相比于其他方式而言极大的**节省资源**
@@ -37,11 +39,11 @@
    - docker的方式，创建的容器不是一个完整的操作系统，而是充分利用**宿主机内核**+**进程**，只是创建了一些必备的资源
 4. Tips
    - 镜像：模板，例如[centos+mysql]、[ubuntu+mysql]、[ubuntu+mysql+redis]（基础镜像 + 自定义镜像）
-#### 必备概念
+### 必备概念
 ![](Django部署/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-18%20100051.png)
 - DockerHub,[远程镜像仓库](https://hub.docker.com/)
     > 仓库中有官方的一些镜像文件，也有开发者自定义的镜像文件
-#### 环境准备
+### 环境准备
 - Linux：centos
 - 网络配置
 ![](Django部署/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-18%20103111.png)
@@ -53,7 +55,8 @@ vim ifcfg-ens33
 service network restart
 systemctl restart network
 ```
-#### 系统初始化
+### 系统初始化
+
 - 关闭selinux
   - 查看状态：`getenforce`
   - 临时关闭：`serenforce 0`
@@ -84,7 +87,7 @@ yum install -y wget bash-completion vim lrzss wget expect net-tools nc nmap tree
 ```
 - 修改host
   - 在windows本地C://Windows/System32/drivers/etc/hosts写入`ip name:`
-#### 安装docker
+### 安装docker
 1. 安装docker-ce社区版
    - 配置repo源
     ```shell
@@ -100,7 +103,7 @@ yum install -y wget bash-completion vim lrzss wget expect net-tools nc nmap tree
     ```shell
     # 最新版
     yum install -y docker-ce
-
+   
     # 指定版本
     yum install -y docker-ce-23.0.6
     ```
@@ -122,10 +125,10 @@ yum install -y wget bash-completion vim lrzss wget expect net-tools nc nmap tree
     ```shell
     # 查看docker信息
     docker version
-
+   
     # 查看docker信息
     docker info
-
+   
     # docker-client
     ```
 3. 配置docker
@@ -165,11 +168,11 @@ systemctl restart docker
     net.ipv4.conf.all.rp_filter = 0
     net.ipv4.ip_forward = 1
     EOF
-
+   
     sysctl -p /etc/sysctl.d/docker.conf
     ```
 ---
-#### 案例1：部署Flask网站
+### 案例1：部署Flask网站
 - 需求：基于docker创建在ubuntu18.04系统上运行我们开发的Flask网站
 - 流程
   1. 在linux服务器安装docker
@@ -184,13 +187,13 @@ systemctl restart docker
      1. Dockerfile
         ```shell
         # Dockerfile
-
+        
         # Base images 基础镜像
         FROM ubuntu:18.04
-
+        
         # MAINTAINER 维护者信息
         MAINTAINER (name) xxxxxx@xxx.com
-
+        
         # RUN 执行以下命令
         # 给ubuntu的apt换阿里源
         RUN sed -i 's@http://archive.ubuntu.com/ubuntu/@http://mirrors.aliyun.com/ubuntu/@g' /etc/apt/sources.list
@@ -198,16 +201,16 @@ systemctl restart docker
         RUN apt install python3 python3-pip -y
         RUN pip3 install flask
         RUN mkdir -p /data/www/
-
+        
         # 拷贝代码文件至工作目录
         COPY app.py /data/www/app.py
-
+        
         # 工作目录
         WORKDIR /data/www/
-
+        
         # EXPOSE 映射端口
         EXPOSE 80
-
+        
         # 容器启动时执行命令
         CMD ["python3", "app.py"]
         ```
@@ -230,19 +233,20 @@ systemctl restart docker
             ```shell
             # 查看当前正在存活的容器
             docker ps
-
+            
             # 查看所有的容器
             docker ps -a
-
+            
             # 停止正在存活的容器
             docker stop (name or 容器id前三位)
-
+            
             # 删除一些已经停止的容器
             docker rm (name or 容器id前三位)
             ```
 ---
 ## Dockerfile指令详解
-#### Dockerfile指令
+
+### Dockerfile指令
 - 创建镜像时运行
 ![](Django部署/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-01-18%20154742.png)
 ENV是设置环境变量
@@ -263,7 +267,7 @@ ENTRYPOINT ["python3", "app.py"]
 ```
 - Tips
   - 可以编写一个shell脚本，用于执行CMD或者ENTRYPOINT指令
-#### 构建
+### 构建
 ```shell
 # 这种方式会在第一次构建时将下载的数据缓存下来，之后再构建的话就会使用缓存中的文件，而不是再网络上重新下载
 docker build -t(tag) xxx(name):xxx(version) .(current dir) -f Dockerfile
@@ -271,7 +275,7 @@ docker build -t(tag) xxx(name):xxx(version) .(current dir) -f Dockerfile
 # 想要去除缓存，可以这样做
 docker build -t(tag) xxx(name):xxx(version) .(current dir) -f Dockerfile --no-cache
 ```
-#### 创建容器
+### 创建容器
 1. 容器中必须要有一个前台进程，否则的话，创建之后立即销毁
 2. 宿主机在运行时是否需要前台？不需要，一般以后台的进程来运行
 3. 进入系统，人为的保持前台进程，以防止容器销毁
@@ -283,7 +287,7 @@ docker run -ti ubuntu:18.04 sh
 ```shell
 docker run -ti ubuntu:18.04 ping baidu.com
 ```
-#### 容器的销毁
+### 容器的销毁
 ```shell
 # 单个删除
 docker stop 容器ID
@@ -293,7 +297,7 @@ docker rm 容器ID
 docker stop `docker ps -aq`
 docker rm `docker ps -aq`
 ```
-#### 常见操作
+### 常见操作
 1. 镜像含前台进程，创建容器 + 启动
 `docker run -d -p 80:8000 --name xxx xxx:xxx`
 2. 镜像不含前台进程，进入系统
@@ -303,7 +307,7 @@ docker rm `docker ps -aq`
 `docker exec -ti 容器ID bash`
 
 ---
-#### 案例2：Django项目部署
+### 案例2：Django项目部署
 - 需求：在容器中创建centos7.9系统 + Python3.9.5 + django3.2 + gitee拉代码
 - 流程：
   1. 下载基础镜像centos7.9
@@ -317,7 +321,8 @@ docker rm `docker ps -aq`
   3. 启动docker
 ---
 ## Docker创建的ubuntu配置
-#### 创建容器后安装
+
+### 创建容器后安装
 ```shell
 # 修改 apt源
 sed -i 's@http://archive.ubuntu.com/ubuntu/@http://mirrors.aliyun.com/ubuntu/@g' /etc/apt/sources.list
@@ -336,19 +341,19 @@ ln -s /usr/bin/python3.9 /usr/bin/python  # 建立软连接
 python --version
 pip --version
 ```
-#### 将主机文件传到docker容器
+### 将主机文件传到docker容器
 ```shell
 docker cp /path/on/host container_id:/path/in/container
 ```
-#### 将docker容器文件传到主机
+### 将docker容器文件传到主机
 ```shell
 docker cp container_id:/path/in/container /path/on/host
 ```
-#### 将容器生成镜像
+### 将容器生成镜像
 ```shell
 docker commit <container-id> ubuntu:20.04_py39
 ```
-#### 给容器指定ip
+### 给容器指定ip
 1. 创建网络模型
 ```shell
 # docker network create: 创建一个 Docker 网络的命令。
@@ -363,14 +368,14 @@ docker run -it --network my-net --ip 192.168.0.2 my-ubuntu-img
 # 还可以指定mac地址
 docker run -it --mac-address xx:xx:xx:xx:xx:xx --network my-net --ip 192.168.0.2 my-ubuntu-img
 ```
-#### 安装nginx
+### 安装nginx
 ```shell
 apt install nginx
 
 # 安装依赖
 apt install curl gnupg2 ca-certificates lsb-release
 ```
-#### 安装uwsgi
+### 安装uwsgi
 ```shell
 apt install gcc
 
@@ -379,3 +384,34 @@ apt install build-essential python3-dev
 
 pip install uwsgi
 ```
+
+# Docker compose使用教程
+
+## 创建容器
+
+以下是docker-compose.yaml的内容
+
+```yaml
+version: '1.0'
+services:
+    dify-test:
+        image: dify_test:latest
+        ports:
+            - "5001:5001"
+            - "5000:5000"
+        restart: always
+        env_file:
+            - .env
+```
+
+上述内容描述了基本的创建容器手段
+
+之后可以执行以下指令用于创建容器
+
+`docker compose up`
+
+`docker compose --env-file .env up ` 指定环境变量文件用于加载到环境中,也可在yaml中加载
+
+`docker compose -f docker-compose.yaml up` 指定yaml文件做创建
+
+## 创建镜像

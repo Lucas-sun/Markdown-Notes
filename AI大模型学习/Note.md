@@ -36,3 +36,45 @@ hugging face被誉为开源模型界的github
 ## AIGC产业拆解以及常见名词
 
 ![AIGC介绍](./Note/AIGC介绍.png)
+
+## Langchain介绍
+
+### 初识Langchain
+
+> [!NOTE]
+>
+> LLM大模型与AI应用的粘合剂
+
+### Langchain是什么以及发展过程
+
+- Langchain是一个开源框架，旨在简化使用大型语言模型构建端到端应用程序的过程
+- Langchain发展历程
+
+![Langchain发展历程](./Note/Langchain发展历程.png)
+
+### Langchain能做什么和能力一览
+
+- 能做什么
+
+![Langchain能做什么](./Note/Langchain能做什么.png)
+
+- 能力详解
+
+![Langchain能力一览](./Note/Langchain能力一览.png)
+
+### Langchain的优势与劣势分析
+
+![Langchain优劣势分析](./Note/Langchain优劣势分析.png)
+
+### Langchain使用环境的搭建
+
+- python安装
+- jupyter notebook安装
+- Langchain安装
+
+### 第一个实例，了解Langchain的基本模块
+
+> [!NOTE]
+>
+> 转到Langchain.ipynb
+
